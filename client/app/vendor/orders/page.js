@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { getVendorOrders, updateOrderStatus } from "@/lib/api";
 
-export default function VendorOrdersPage() {
+function VendorOrdersContent() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -184,5 +184,13 @@ export default function VendorOrdersPage() {
         </section>
       </div>
     </ProtectedRoute>
+  );
+}
+
+export default function VendorOrdersPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-sm text-gray-400">Loading...</div>}>
+      <VendorOrdersContent />
+    </Suspense>
   );
 }
